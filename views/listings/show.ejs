@@ -1,6 +1,6 @@
 <% layout('layouts/boilerplate') %>
 <div class="row mt-3">
-  <div class="col-8 offset-3">
+  <div class="col-12 col-md-8 offset-md-2">
     <h3><%= listing.title %>  :</h3>
   </div>
 
@@ -12,7 +12,7 @@
         imageUrl = listing.image;
       }
     %>
-    <div class="card col-6 offset-3 show-card listing-card">
+    <div class="card col-12 col-md-8 offset-md-2 show-card listing-card">
       <img src="<%= imageUrl %>" alt="<%= listing.title %> class="card-img-top show-img" style="height: 20rem;"/>
       <div class="card-body">
         <p class="card-text"><b>Owned By:</b> <i><%= listing.owner ? listing.owner.username : 'Unknown Owner' %></i></p>
@@ -62,7 +62,7 @@
     </div>
     
     <!-- Map Section -->
-    <div class="col-8 offset-3 mb-4">
+    <div class="col-12 col-md-8 offset-md-2 mb-4">
       <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
           <h5 class="mb-0">
@@ -86,17 +86,16 @@
     <br />
 <!-- Adding authentication jab currentUser ki id an owenr ki id same hogi tbhi wo listing ko dlt ya edit kr payega -->
     <% if(currentUser && listing.owner && listing.owner._id.equals(currentUser._id)){ %>
-    <div class="btns">
-    <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark col-1 offset-3 edit-btn">Edit</a>
-    <br /><br />
-    <form method="POST" action="/listings/<%=listing._id%>?_method=DELETE">
-      <button class="btn btn-dark offset-3">Delete</button>
+    <div class="btns d-flex flex-column flex-md-row gap-2 justify-content-center">
+    <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark edit-btn">Edit</a>
+    <form method="POST" action="/listings/<%=listing._id%>?_method=DELETE" class="d-inline">
+      <button class="btn btn-dark">Delete</button>
     </form>
     </div>
     <% } %>
    
   
-  <div class="col-8 offset-3 mb-3">
+  <div class="col-12 col-md-8 offset-md-2 mb-3">
     <hr>
      <% if(currentUser){ %>
     <h4>Leave A Review</h4>
@@ -143,7 +142,7 @@
     <div class="row">           
 
     <% for (let review of listing.reviews) { %>
-    <div class="card col-5 ms-3 mb-3"> 
+    <div class="card col-12 col-md-5 ms-md-3 mb-3"> 
         <div class="card-body">
             <h5 class="card-title"><%= review.author.username %></h5>
             <p class="starability-result card-text" data-rating="<%= review.rating %>">

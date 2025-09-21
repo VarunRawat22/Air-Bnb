@@ -1,69 +1,98 @@
 <!-- Main Navbar -->
 <nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
   <div class="container-fluid px-4">
-    <!-- Logo -->
-    <a class="navbar-brand" href="/">
-      <i class="fa-solid fa-compass text-danger"></i>
-      <span class="ms-2 fw-bold text-danger">airbnb</span>
-    </a>
-
-    <!-- Search Bar -->
-    <div class="search-container mx-auto">
-      <form class="search-bar" action="/listings/search" method="GET">
-        <div class="search-segment">
-          <label class="search-label">Where</label>
-          <input type="text" name="location" placeholder="Search destinations" class="search-input">
-        </div>
-        <div class="search-divider"></div>
-        <div class="search-segment">
-          <label class="search-label">Check in</label>
-          <input type="date" name="checkin" class="search-input">
-        </div>
-        <div class="search-divider"></div>
-        <div class="search-segment">
-          <label class="search-label">Check out</label>
-          <input type="date" name="checkout" class="search-input">
-        </div>
-        <div class="search-divider"></div>
-        <div class="search-segment">
-          <label class="search-label">Who</label>
-          <input type="number" name="guests" placeholder="Add guests" min="1" max="16" class="search-input">
-        </div>
-        <button type="submit" class="search-button">
-          <i class="fa-solid fa-magnifying-glass"></i>
-        </button>
-      </form>
-    </div>
-
-    <!-- Right Navigation -->
-    <div class="navbar-nav ms-auto align-items-center">
-      <a class="nav-link me-3" href="/listings/new">
-        <span class="d-none d-md-inline">Airbnb your home</span>
+    <!-- Logo and Mobile Menu Toggle -->
+    <div class="d-flex align-items-center justify-content-between w-100">
+      <a class="navbar-brand" href="/">
+        <i class="fa-solid fa-compass text-danger"></i>
+        <span class="ms-2 fw-bold text-danger d-none d-sm-inline">airbnb</span>
       </a>
-      <a class="nav-link me-3" href="#">
-        <i class="fa-solid fa-globe"></i>
-      </a>
-      <div class="dropdown">
-        <button class="btn btn-outline-dark dropdown-toggle" type="button" data-bs-toggle="dropdown">
-          <i class="fa-solid fa-bars me-2"></i>
-          <i class="fa-solid fa-circle-user"></i>
-        </button>
-        <ul class="dropdown-menu">
-          <% if(!currentUser){ %>
-            <li><a class="dropdown-item" href="/signup">Sign up</a></li>
-            <li><a class="dropdown-item" href="/login">Log in</a></li>
-          <% } %>
-          <% if(currentUser){ %>
-            <li><a class="dropdown-item" href="/bookings">My Bookings</a></li>
-            <li><a class="dropdown-item" href="/listings/new">Host your home</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="/logout">Log out</a></li>
-          <% } %>
-        </ul>
+
+      <!-- Desktop Search Bar -->
+      <div class="search-container d-none d-lg-block mx-auto">
+        <form class="search-bar" action="/listings/search" method="GET">
+          <div class="search-segment">
+            <label class="search-label">Where</label>
+            <input type="text" name="location" placeholder="Search destinations" class="search-input">
+          </div>
+          <div class="search-divider"></div>
+          <div class="search-segment">
+            <label class="search-label">Check in</label>
+            <input type="date" name="checkin" class="search-input">
+          </div>
+          <div class="search-divider"></div>
+          <div class="search-segment">
+            <label class="search-label">Check out</label>
+            <input type="date" name="checkout" class="search-input">
+          </div>
+          <div class="search-divider"></div>
+          <div class="search-segment">
+            <label class="search-label">Who</label>
+            <input type="number" name="guests" placeholder="Add guests" min="1" max="16" class="search-input">
+          </div>
+          <button type="submit" class="search-button">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </form>
+      </div>
+
+      <!-- Right Navigation -->
+      <div class="navbar-nav d-flex flex-row align-items-center">
+        <a class="nav-link me-2 d-none d-md-block" href="/listings/new">
+          <span>Airbnb your home</span>
+        </a>
+        <a class="nav-link me-2" href="#">
+          <i class="fa-solid fa-globe"></i>
+        </a>
+        <div class="dropdown">
+          <button class="btn btn-outline-dark dropdown-toggle" type="button" data-bs-toggle="dropdown">
+            <i class="fa-solid fa-bars me-2"></i>
+            <i class="fa-solid fa-circle-user"></i>
+          </button>
+          <ul class="dropdown-menu">
+            <% if(!currentUser){ %>
+              <li><a class="dropdown-item" href="/signup">Sign up</a></li>
+              <li><a class="dropdown-item" href="/login">Log in</a></li>
+            <% } %>
+            <% if(currentUser){ %>
+              <li><a class="dropdown-item" href="/bookings">My Bookings</a></li>
+              <li><a class="dropdown-item" href="/listings/new">Host your home</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/logout">Log out</a></li>
+            <% } %>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
 </nav>
+
+<!-- Mobile Search Bar (hidden on desktop) -->
+<div class="d-block d-md-none mobile-search-container">
+  <div class="container-fluid px-3 py-2">
+    <form class="mobile-search-bar" action="/listings/search" method="GET">
+      <div class="row g-2">
+        <div class="col-12">
+          <input type="text" name="location" placeholder="Where are you going?" class="form-control">
+        </div>
+        <div class="col-6">
+          <input type="date" name="checkin" class="form-control" placeholder="Check in">
+        </div>
+        <div class="col-6">
+          <input type="date" name="checkout" class="form-control" placeholder="Check out">
+        </div>
+        <div class="col-8">
+          <input type="number" name="guests" placeholder="Guests" min="1" max="16" class="form-control">
+        </div>
+        <div class="col-4">
+          <button type="submit" class="btn btn-danger w-100">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
 
 <!-- Category Filters Bar -->
 <div class="category-bar bg-white border-bottom">

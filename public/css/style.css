@@ -119,6 +119,7 @@
 /* Number input styling */
 .search-input[type="number"] {
     -moz-appearance: textfield;
+    appearance: textfield;
 }
 
 .search-input[type="number"]::-webkit-outer-spin-button,
@@ -374,55 +375,119 @@
     transform: translateX(20px);
 }
 
-/* Responsive Design */
+/* Mobile-First Responsive Design */
 @media (max-width: 768px) {
-    .search-container {
-        display: none;
+    /* Container adjustments */
+    .container, .container-fluid {
+        padding-left: 15px;
+        padding-right: 15px;
     }
     
-    /* Show a simplified search bar on mobile */
+    /* Navbar adjustments */
+    .navbar {
+        height: auto;
+        min-height: 60px;
+        padding: 10px 0;
+    }
+    
+    .navbar .container-fluid {
+        padding: 0 15px;
+    }
+    
+    .navbar .d-flex {
+        flex-wrap: nowrap;
+        align-items: center;
+    }
+    
+    /* Hide desktop search bar completely on mobile */
     .navbar .search-container {
-        display: block;
-        max-width: 100%;
-        margin: 10px 0;
+        display: none !important;
     }
     
-    .search-bar {
-        flex-direction: column;
-        border-radius: 16px;
-        padding: 16px;
-        gap: 12px;
+    /* Mobile navbar brand */
+    .navbar-brand {
+        font-size: 1.2rem;
+        flex-shrink: 0;
     }
     
-    .search-segment {
-        width: 100%;
-        min-width: auto;
+    /* Mobile navigation */
+    .navbar-nav {
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .navbar-nav .nav-link {
+        padding: 8px;
+        font-size: 14px;
+    }
+    
+    .navbar-nav .dropdown .btn {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+    
+    /* Mobile search bar styling */
+    .mobile-search-container {
+        background-color: #ffffff;
+        border-bottom: 1px solid #e0e0e0;
+        padding: 10px 0;
+    }
+    
+    .mobile-search-bar .form-control {
+        font-size: 16px;
         padding: 12px;
+        border-radius: 8px;
         border: 1px solid #dddddd;
-        border-radius: 8px;
     }
     
-    .search-divider {
-        display: none;
+    .mobile-search-bar .form-control:focus {
+        border-color: #ff385c;
+        box-shadow: 0 0 0 0.2rem rgba(255, 56, 92, 0.25);
     }
     
-    .search-button {
+    /* Navigation adjustments */
+    .navbar-nav {
+        flex-direction: row;
+        justify-content: space-between;
         width: 100%;
-        border-radius: 8px;
-        height: 48px;
+        margin-top: 10px;
+    }
+    
+    .navbar-nav .nav-link {
+        padding: 8px 12px;
+        font-size: 14px;
     }
     
     .navbar-nav .nav-link span {
         display: none;
     }
     
+    /* Category bar adjustments */
+    .category-bar {
+        padding: 15px 0;
+        background-color: #ffffff;
+    }
+    
+    .category-bar .container-fluid {
+        padding: 0 15px;
+    }
+    
+    .category-scroll {
+        position: relative;
+        margin-bottom: 15px;
+    }
+    
     .category-list {
         gap: 20px;
-        padding: 0 20px;
+        padding: 0 40px;
+        overflow-x: auto;
+        scroll-behavior: smooth;
     }
     
     .category-item {
         min-width: 60px;
+        flex-shrink: 0;
     }
     
     .category-item span {
@@ -431,8 +496,27 @@
     
     .filter-controls {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch;
         gap: 12px;
+        margin-top: 15px;
+        padding: 0 15px;
+    }
+    
+    .filter-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 16px;
+    }
+    
+    .toggle-container {
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+    }
+    
+    .toggle-label {
+        font-size: 14px;
     }
     
     .scroll-btn {
@@ -443,20 +527,128 @@
     .scroll-btn i {
         font-size: 10px;
     }
+    
+    /* Card adjustments for mobile */
+    .listing-card {
+        margin-bottom: 1rem;
+    }
+    
+    .show-card {
+        margin: 0 15px;
+    }
+    
+    /* Show page specific adjustments */
+    .show-img {
+        height: 25vh !important;
+        object-fit: cover;
+    }
+    
+    /* Listing cards adjustments */
+    .card-img-top {
+        height: 15rem !important;
+    }
+    
+    /* Search results header */
+    .search-results-header {
+        padding: 15px;
+        margin: 0 15px 20px 15px;
+    }
+    
+    /* View toggle buttons */
+    .btn-group {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .btn-group .btn {
+        border-radius: 8px !important;
+        margin-bottom: 5px;
+    }
+    
+    /* Map adjustments */
+    #listing-map {
+        height: 300px !important;
+    }
+    
+    /* Button adjustments */
+    .btn-lg {
+        padding: 12px 24px;
+        font-size: 16px;
+    }
+    
+    /* Form adjustments */
+    .form-control {
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+    
+    /* Text adjustments */
+    h1, h2, h3, h4, h5, h6 {
+        word-wrap: break-word;
+    }
+    
+    /* Footer adjustments */
+    .f-info {
+        flex-direction: column;
+        height: auto;
+        padding: 20px 0;
+    }
+    
+    .f-info-links, .f-info-social, .f-info-brand {
+        margin: 10px 0;
+    }
 }
 
 @media (max-width: 576px) {
+    /* Extra small devices (phones) */
     .navbar-brand span {
         display: none;
     }
     
+    .navbar-brand {
+        font-size: 1.1rem;
+    }
+    
+    /* Navbar adjustments for very small screens */
+    .navbar {
+        min-height: 50px;
+        padding: 8px 0;
+    }
+    
+    .navbar .container-fluid {
+        padding: 0 10px;
+    }
+    
+    .navbar-nav .nav-link {
+        padding: 6px;
+        font-size: 12px;
+    }
+    
+    .navbar-nav .dropdown .btn {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+    
+    /* Mobile search bar adjustments */
+    .mobile-search-container {
+        padding: 8px 0;
+    }
+    
+    .mobile-search-bar .form-control {
+        font-size: 16px;
+        padding: 10px;
+    }
+    
     .category-bar {
-        padding: 15px 0;
+        padding: 10px 0;
+    }
+    
+    .category-bar .container-fluid {
+        padding: 0 10px;
     }
     
     .category-list {
         gap: 16px;
-        padding: 0 15px;
+        padding: 0 30px;
     }
     
     .category-item {
@@ -464,7 +656,77 @@
     }
     
     .category-item i {
-        font-size: 20px;
+        font-size: 18px;
+    }
+    
+    .category-item span {
+        font-size: 9px;
+    }
+    
+    .filter-controls {
+        padding: 0 10px;
+        margin-top: 10px;
+    }
+    
+    .filter-btn {
+        padding: 10px 14px;
+        font-size: 14px;
+    }
+    
+    .toggle-label {
+        font-size: 13px;
+    }
+    
+    /* Show page adjustments for small screens */
+    .show-img {
+        height: 20vh !important;
+    }
+    
+    /* Map adjustments for small screens */
+    #listing-map {
+        height: 250px !important;
+    }
+    
+    /* Button adjustments */
+    .btn-lg {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+    
+    /* Card adjustments */
+    .card-body {
+        padding: 1rem !important;
+    }
+    
+    /* Form adjustments */
+    .form-control {
+        font-size: 16px;
+        padding: 12px;
+    }
+    
+    /* Text adjustments */
+    h3 {
+        font-size: 1.5rem;
+    }
+    
+    h4 {
+        font-size: 1.25rem;
+    }
+    
+    /* Alert adjustments */
+    .alert {
+        padding: 12px;
+        font-size: 14px;
+    }
+    
+    /* Modal adjustments */
+    .modal-dialog {
+        margin: 10px;
+    }
+    
+    /* Table adjustments */
+    .table-responsive {
+        font-size: 14px;
     }
 }
 
