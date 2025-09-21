@@ -1,0 +1,222 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4>Booking Details</h4>
+                    <div>
+                        <% if (booking.status === 'pending') { %>
+                            <span class="badge bg-warning">Pending Payment</span>
+                        <% } else if (booking.status === 'confirmed') { %>
+                            <span class="badge bg-success">Confirmed</span>
+                        <% } else if (booking.status === 'cancelled') { %>
+                            <span class="badge bg-danger">Cancelled</span>
+                        <% } else if (booking.status === 'completed') { %>
+                            <span class="badge bg-info">Completed</span>
+                        <% } %>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <img src="<%= booking.listing.image %>" class="img-fluid rounded" alt="<%= booking.listing.title %>">
+                        </div>
+                        <div class="col-md-8">
+                            <h5><%= booking.listing.title %></h5>
+                            <p class="text-muted">
+                                <i class="fas fa-map-marker-alt me-1"></i>
+                                <%= booking.listing.location %>, <%= booking.listing.country %>
+                            </p>
+                            <p class="text-muted">
+                                <i class="fas fa-calendar me-1"></i>
+                                <%= new Date(booking.checkIn).toLocaleDateString() %> - <%= new Date(booking.checkOut).toLocaleDateString() %>
+                                (<%= booking.nights %> nights)
+                            </p>
+                            <p class="text-muted">
+                                <i class="fas fa-users me-1"></i>
+                                <%= booking.guests %> guest<%= booking.guests > 1 ? 's' : '' %>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Booking Information</h6>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td><strong>Booking ID:</strong></td>
+                                    <td><%= booking._id %></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Check-in:</strong></td>
+                                    <td><%= new Date(booking.checkIn).toLocaleDateString() %></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Check-out:</strong></td>
+                                    <td><%= new Date(booking.checkOut).toLocaleDateString() %></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Nights:</strong></td>
+                                    <td><%= booking.nights %></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Guests:</strong></td>
+                                    <td><%= booking.guests %></td>
+                                </tr>
+                                <% if (booking.specialRequests) { %>
+                                    <tr>
+                                        <td><strong>Special Requests:</strong></td>
+                                        <td><%= booking.specialRequests %></td>
+                                    </tr>
+                                <% } %>
+                                <tr>
+                                    <td><strong>Booked on:</strong></td>
+                                    <td><%= new Date(booking.createdAt).toLocaleDateString() %></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Payment Information</h6>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td><strong>Payment Status:</strong></td>
+                                    <td>
+                                        <% if (booking.paymentStatus === 'paid') { %>
+                                            <span class="badge bg-success">Paid</span>
+                                        <% } else if (booking.paymentStatus === 'pending') { %>
+                                            <span class="badge bg-warning">Pending</span>
+                                        <% } else if (booking.paymentStatus === 'failed') { %>
+                                            <span class="badge bg-danger">Failed</span>
+                                        <% } else if (booking.paymentStatus === 'refunded') { %>
+                                            <span class="badge bg-info">Refunded</span>
+                                        <% } %>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Total Amount:</strong></td>
+                                    <td>₹<%= booking.totalPrice.toLocaleString('en-IN') %></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Service Fee:</strong></td>
+                                    <td>₹<%= booking.commission.toLocaleString('en-IN') %></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Host Payout:</strong></td>
+                                    <td>₹<%= booking.hostPayout.toLocaleString('en-IN') %></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <% if (booking.status === 'cancelled') { %>
+                        <div class="alert alert-warning mt-3">
+                            <h6>Cancellation Details</h6>
+                            <p><strong>Reason:</strong> <%= booking.cancellationReason || 'No reason provided' %></p>
+                            <p><strong>Cancelled by:</strong> <%= booking.cancelledBy %></p>
+                            <p><strong>Cancelled on:</strong> <%= new Date(booking.cancelledAt).toLocaleDateString() %></p>
+                        </div>
+                    <% } %>
+
+                    <div class="mt-4">
+                        <% if (isGuest) { %>
+                            <% if (booking.status === 'pending' && booking.paymentStatus === 'pending') { %>
+                                <a href="/bookings/<%= booking._id %>/payment" class="btn btn-primary">Complete Payment</a>
+                            <% } %>
+                            
+                            <% if (booking.canBeCancelled()) { %>
+                                <button class="btn btn-outline-danger" onclick="showCancelModal()">Cancel Booking</button>
+                            <% } %>
+                        <% } %>
+                        
+                        <a href="/bookings" class="btn btn-outline-secondary">Back to Bookings</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h6><%= isGuest ? 'Host Information' : 'Guest Information' %></h6>
+                </div>
+                <div class="card-body">
+                    <% if (isGuest) { %>
+                        <p><strong>Host:</strong> <%= booking.host.username || booking.host.email %></p>
+                        <p><strong>Email:</strong> <%= booking.host.email %></p>
+                    <% } else { %>
+                        <p><strong>Guest:</strong> <%= booking.guest.username || booking.guest.email %></p>
+                        <p><strong>Email:</strong> <%= booking.guest.email %></p>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6>Cancellation Policy</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li>• Free cancellation up to 7 days before check-in</li>
+                        <li>• 50% refund for cancellations 1-7 days before check-in</li>
+                        <li>• No refund for cancellations less than 24 hours before check-in</li>
+                    </ul>
+                </div>
+            </div>
+
+            <% if (booking.canBeCancelled()) { %>
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h6>Refund Information</h6>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Refund Amount:</strong> ₹<%= booking.calculateRefundAmount().toLocaleString('en-IN') %></p>
+                        <small class="text-muted">Based on current cancellation policy</small>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<!-- Cancel Booking Modal -->
+<div class="modal fade" id="cancelModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cancel Booking</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="/bookings/<%= booking._id %>/cancel" method="POST">
+                <div class="modal-body">
+                    <p>Are you sure you want to cancel this booking?</p>
+                    <div class="mb-3">
+                        <label for="cancellationReason" class="form-label">Reason for cancellation (optional)</label>
+                        <textarea class="form-control" id="cancellationReason" name="reason" rows="3" 
+                                  placeholder="Please let us know why you're cancelling..."></textarea>
+                    </div>
+                    <div class="alert alert-info">
+                        <small>
+                            <strong>Cancellation Policy:</strong><br>
+                            • Free cancellation up to 7 days before check-in<br>
+                            • 50% refund for cancellations 1-7 days before check-in<br>
+                            • No refund for cancellations less than 24 hours before check-in
+                        </small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Keep Booking</button>
+                    <button type="submit" class="btn btn-danger">Cancel Booking</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function showCancelModal() {
+    const modal = new bootstrap.Modal(document.getElementById('cancelModal'));
+    modal.show();
+}
+</script> 

@@ -1,0 +1,166 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Book Your Stay</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <img src="<%= listing.image %>" class="img-fluid rounded" alt="<%= listing.title %>">
+                        </div>
+                        <div class="col-md-8">
+                            <h5><%= listing.title %></h5>
+                            <p class="text-muted"><%= listing.location %>, <%= listing.country %></p>
+                            <p class="text-muted">₹<%= listing.price.toLocaleString('en-IN') %> per night</p>
+                        </div>
+                    </div>
+
+                    <form action="/bookings/new/<%= listing._id %>" method="POST">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="checkIn" class="form-label">Check-in Date</label>
+                                <input type="date" class="form-control" id="checkIn" name="checkIn" 
+                                       value="<%= checkIn %>" required min="<%= new Date().toISOString().split('T')[0] %>">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="checkOut" class="form-label">Check-out Date</label>
+                                <input type="date" class="form-control" id="checkOut" name="checkOut" 
+                                       value="<%= checkOut %>" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="guests" class="form-label">Number of Guests</label>
+                                <select class="form-control" id="guests" name="guests" required>
+                                    <% for(let i = 1; i <= 10; i++) { %>
+                                        <option value="<%= i %>" <%= guests == i ? 'selected' : '' %>><%= i %> guest<%= i > 1 ? 's' : '' %></option>
+                                    <% } %>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="specialRequests" class="form-label">Special Requests (Optional)</label>
+                                <textarea class="form-control" id="specialRequests" name="specialRequests" rows="3" 
+                                          placeholder="Any special requests or requirements..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="price-breakdown mt-4">
+                            <h6>Price Breakdown</h6>
+                            <div class="row">
+                                <div class="col-6">₹<%= listing.price.toLocaleString('en-IN') %> × <span id="nightsDisplay"><%= nights %></span> nights</div>
+                                <div class="col-6 text-end">₹<span id="subtotalDisplay"><%= (listing.price * nights).toLocaleString('en-IN') %></span></div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-6"><strong>Total</strong></div>
+                                <div class="col-6 text-end"><strong>₹<span id="totalDisplay"><%= totalPrice.toLocaleString('en-IN') %></span></strong></div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg w-100">Continue to Payment</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h6>Booking Summary</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>Check-in:</strong> <span id="summaryCheckIn"><%= checkIn ? new Date(checkIn).toLocaleDateString() : 'Select date' %></span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Check-out:</strong> <span id="summaryCheckOut"><%= checkOut ? new Date(checkOut).toLocaleDateString() : 'Select date' %></span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Guests:</strong> <span id="summaryGuests"><%= guests %></span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Nights:</strong> <span id="summaryNights"><%= nights %></span>
+                    </div>
+                    <hr>
+                    <div class="mb-3">
+                        <strong>Total Price:</strong> ₹<span id="summaryTotal"><%= totalPrice.toLocaleString('en-IN') %></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6>Cancellation Policy</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li>• Free cancellation up to 7 days before check-in</li>
+                        <li>• 50% refund for cancellations 1-7 days before check-in</li>
+                        <li>• No refund for cancellations less than 24 hours before check-in</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const checkInInput = document.getElementById('checkIn');
+    const checkOutInput = document.getElementById('checkOut');
+    const guestsSelect = document.getElementById('guests');
+    const listingPrice = <%= listing.price %>;
+
+    function updatePrice() {
+        const checkIn = new Date(checkInInput.value);
+        const checkOut = new Date(checkOutInput.value);
+        
+        if (checkIn && checkOut && checkOut > checkIn) {
+            const diffTime = Math.abs(checkOut - checkIn);
+            const nights = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            const totalPrice = listingPrice * nights;
+
+            // Update displays
+            document.getElementById('nightsDisplay').textContent = nights;
+            document.getElementById('subtotalDisplay').textContent = totalPrice.toLocaleString('en-IN');
+            document.getElementById('totalDisplay').textContent = totalPrice.toLocaleString('en-IN');
+            document.getElementById('summaryNights').textContent = nights;
+            document.getElementById('summaryTotal').textContent = totalPrice.toLocaleString('en-IN');
+        }
+    }
+
+    function updateSummary() {
+        if (checkInInput.value) {
+            document.getElementById('summaryCheckIn').textContent = new Date(checkInInput.value).toLocaleDateString();
+        }
+        if (checkOutInput.value) {
+            document.getElementById('summaryCheckOut').textContent = new Date(checkOutInput.value).toLocaleDateString();
+        }
+        document.getElementById('summaryGuests').textContent = guestsSelect.value;
+    }
+
+    checkInInput.addEventListener('change', function() {
+        // Set minimum check-out date to day after check-in
+        const minCheckOut = new Date(checkInInput.value);
+        minCheckOut.setDate(minCheckOut.getDate() + 1);
+        checkOutInput.min = minCheckOut.toISOString().split('T')[0];
+        
+        updatePrice();
+        updateSummary();
+    });
+
+    checkOutInput.addEventListener('change', function() {
+        updatePrice();
+        updateSummary();
+    });
+
+    guestsSelect.addEventListener('change', updateSummary);
+});
+</script> 

@@ -1,0 +1,1230 @@
+.body{
+    font-family: "Plus Jakarta Sans", sans-serif !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.container{
+   flex: 1;
+}
+
+/* New Airbnb-style Navbar Styles */
+.navbar {
+    height: 80px;
+    background-color: #ffffff !important;
+    border-bottom: 1px solid #e0e0e0 !important;
+    padding: 0;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ff385c !important;
+    text-decoration: none;
+}
+
+.navbar-brand:hover {
+    color: #ff385c !important;
+}
+
+/* Search Bar Styles */
+.search-container {
+    max-width: 850px;
+    width: 100%;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 40px;
+    padding: 7px 8px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.search-bar:hover {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
+}
+
+.search-segment {
+    padding: 14px 16px;
+    border-radius: 32px;
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+    min-width: 120px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.search-segment:hover {
+    background-color: #f7f7f7;
+}
+
+.search-segment:active {
+    background-color: #f0f0f0;
+}
+
+.search-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #222222;
+    margin-bottom: 2px;
+}
+
+.search-input {
+    border: none;
+    background: transparent;
+    font-size: 14px;
+    font-weight: 500;
+    color: #222222;
+    outline: none;
+    width: 100%;
+    min-width: 100px;
+}
+
+.search-input::placeholder {
+    color: #717171;
+    font-weight: 400;
+}
+
+.search-input:focus {
+    outline: none;
+}
+
+/* Date input styling */
+.search-input[type="date"] {
+    color: #222222;
+    font-family: inherit;
+}
+
+.search-input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+}
+
+.search-input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+}
+
+/* Number input styling */
+.search-input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.search-input[type="number"]::-webkit-outer-spin-button,
+.search-input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.search-divider {
+    width: 1px;
+    height: 32px;
+    background-color: #dddddd;
+    margin: 0 4px;
+}
+
+.search-button {
+    background-color: #ff385c;
+    border: none;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+}
+
+.search-button:hover {
+    transform: scale(1.05);
+}
+
+.search-button i {
+    font-size: 16px;
+}
+
+/* Right Navigation */
+.navbar-nav .nav-link {
+    color: #222222 !important;
+    font-weight: 500;
+    padding: 12px 16px;
+    border-radius: 22px;
+    transition: background-color 0.2s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    background-color: #f7f7f7;
+}
+
+.dropdown-toggle {
+    border: 1px solid #dddddd;
+    border-radius: 22px;
+    padding: 12px 16px;
+    background-color: white;
+    color: #222222;
+    font-weight: 500;
+}
+
+.dropdown-toggle:hover {
+    background-color: #f7f7f7;
+    border-color: #dddddd;
+    color: #222222;
+}
+
+.dropdown-toggle:focus {
+    box-shadow: none;
+}
+
+/* Category Bar Styles */
+.category-bar {
+    padding: 20px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.category-scroll {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.category-list {
+    display: flex;
+    gap: 32px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 0 40px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.category-list::-webkit-scrollbar {
+    display: none;
+}
+
+.category-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 8px 0;
+    min-width: 80px;
+    transition: all 0.2s ease;
+    border-bottom: 2px solid transparent;
+}
+
+.category-item:hover {
+    border-bottom-color: #dddddd;
+    transform: translateY(-2px);
+}
+
+.category-item.active {
+    border-bottom-color: #222222;
+}
+
+.category-item i {
+    font-size: 24px;
+    color: #717171;
+}
+
+.category-item.active i {
+    color: #222222;
+}
+
+.category-item span {
+    font-size: 12px;
+    font-weight: 500;
+    color: #717171;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.category-item.active span {
+    color: #222222;
+}
+
+.scroll-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: white;
+    border: 1px solid #dddddd;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+.scroll-btn:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.scroll-left {
+    left: 0;
+}
+
+.scroll-right {
+    right: 0;
+}
+
+.scroll-btn i {
+    font-size: 12px;
+    color: #222222;
+}
+
+/* Filter Controls */
+.filter-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.filter-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border: 1px solid #dddddd;
+    border-radius: 22px;
+    background-color: white;
+    color: #222222;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+    border-color: #222222;
+}
+
+.toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.toggle-label {
+    font-size: 14px;
+    color: #222222;
+    font-weight: 500;
+}
+
+.toggle-switch {
+    position: relative;
+    width: 44px;
+    height: 24px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-switch label {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #dddddd;
+    transition: 0.4s;
+    border-radius: 24px;
+}
+
+.toggle-switch label:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+.toggle-switch input:checked + label {
+    background-color: #222222;
+}
+
+.toggle-switch input:checked + label:before {
+    transform: translateX(20px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .search-container {
+        display: none;
+    }
+    
+    /* Show a simplified search bar on mobile */
+    .navbar .search-container {
+        display: block;
+        max-width: 100%;
+        margin: 10px 0;
+    }
+    
+    .search-bar {
+        flex-direction: column;
+        border-radius: 16px;
+        padding: 16px;
+        gap: 12px;
+    }
+    
+    .search-segment {
+        width: 100%;
+        min-width: auto;
+        padding: 12px;
+        border: 1px solid #dddddd;
+        border-radius: 8px;
+    }
+    
+    .search-divider {
+        display: none;
+    }
+    
+    .search-button {
+        width: 100%;
+        border-radius: 8px;
+        height: 48px;
+    }
+    
+    .navbar-nav .nav-link span {
+        display: none;
+    }
+    
+    .category-list {
+        gap: 20px;
+        padding: 0 20px;
+    }
+    
+    .category-item {
+        min-width: 60px;
+    }
+    
+    .category-item span {
+        font-size: 10px;
+    }
+    
+    .filter-controls {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    
+    .scroll-btn {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .scroll-btn i {
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar-brand span {
+        display: none;
+    }
+    
+    .category-bar {
+        padding: 15px 0;
+    }
+    
+    .category-list {
+        gap: 16px;
+        padding: 0 15px;
+    }
+    
+    .category-item {
+        min-width: 50px;
+    }
+    
+    .category-item i {
+        font-size: 20px;
+    }
+}
+
+.fa-compass{
+    font-size: 2rem;
+    color: #fe424d;
+}
+
+.nav-link{
+    color: black !important;
+}
+
+
+
+.f-info-links a{
+    text-decoration: none;
+    color: black;
+    
+}
+
+.f-info-links a:hover{
+    text-decoration: underline;
+}
+
+.f-info-links,.f-info-social,.f-info-brand{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.f-info-socials i{
+    font-size: 1.2rem;
+    margin-right: 1rem;
+
+}
+
+.f-info{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    height: 8rem;
+    background-color:#ebebeb;
+    flex-wrap: wrap;
+    align-items: space-evenly;
+
+}
+
+.listing-card{
+    border: none !important;
+    margin-bottom: 2rem;
+}
+
+.card-img-top{
+    border-radius: 1rem !important;
+    width: 100% !important;
+    object-fit: cover !important;
+}
+
+.card-body{
+    padding: 0 !important;
+}
+
+.card-text p{
+    font-weight: 400;
+
+}
+
+.listing-link{
+    text-decoration: none;
+}
+
+.card-img-overlay{
+    opacity: 0;
+}
+
+.card-img-overlay:hover{
+    opacity: 0.2;
+    background-color: white;
+}
+
+.return{
+    text-decoration: none;
+    color: black;
+    font-weight: 600;
+}
+
+.return:hover{
+    text-decoration: underline;
+}
+
+.add-btn{
+    background-color: #fe424d !important;
+    border: none !important;
+}
+
+/* edit.ejs */
+.edit-btn{
+    background-color: #fe424d !important;
+    border: none !important;
+}
+
+/* show.ejs */
+.show-img{
+    height: 30vh !important;
+}
+  /* used chatgpt to bring fotter to the bottom qoki login and signup m bottom m nhi tha fotter   */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+body {
+    display: flex;
+    flex-direction: column;
+}
+.main-content {
+    flex: 1; /* ye content ko upar rakhega aur footer ko bottom me push karega */
+}
+
+footer {
+    background: #f8f9fa;
+    border-top: 1px solid #ddd;
+}
+
+footer .f-info-social i {
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #555;
+}
+
+footer .f-info-social i:hover {
+    color: #000;
+}
+
+footer .f-info-links a {
+    text-decoration: none;
+    color: #555;
+    transition: color 0.3s;
+}
+
+footer .f-info-links a:hover {
+    color: #000;
+}
+
+/* Search Results Styling */
+.search-results-header {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid #ff385c;
+}
+
+.search-results-header h3 {
+    color: #222222;
+    margin-bottom: 10px;
+}
+
+.search-results-header p {
+    margin-bottom: 8px;
+}
+
+.search-results-header .btn {
+    margin-top: 10px;
+}
+
+/* Map Styling */
+#listing-map {
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.map-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background-color: #f8f9fa;
+    color: #6c757d;
+    border-radius: 8px;
+}
+
+.map-fallback i {
+    margin-bottom: 1rem;
+}
+
+/* Map popup styling */
+.leaflet-popup-content {
+    margin: 8px;
+}
+
+.leaflet-popup-content img {
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+.leaflet-popup-content h6 {
+    margin: 0 0 4px 0;
+    font-weight: 600;
+}
+
+.leaflet-popup-content p {
+    margin: 0 0 4px 0;
+    color: #666;
+}
+
+.leaflet-popup-content small {
+    font-size: 12px;
+    color: #888;
+}
+
+/* ========================================
+   DARK MODE STYLES
+   ======================================== */
+
+/* Dark mode toggle button */
+.dark-mode-toggle {
+    position: fixed;
+    bottom: 100px; /* Position above chatbot button */
+    right: 20px;
+    z-index: 1002; /* Higher than chatbot button */
+    background-color: #ffffff;
+    border: 2px solid #dddddd;
+    border-radius: 50%;
+    width: 60px !important;
+    height: 60px !important;
+    min-width: 60px !important;
+    min-height: 60px !important;
+    max-width: 60px !important;
+    max-height: 60px !important;
+    padding: 0 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    color: #222222;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+/* Hide the text span */
+.dark-mode-toggle span {
+    display: none;
+}
+
+/* Prevent any form or container styles from affecting the button */
+.dark-mode-toggle,
+.dark-mode-toggle * {
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    border-radius: 50% !important;
+}
+
+.dark-mode-toggle i {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.dark-mode-toggle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    border-color: #ff385c;
+}
+
+.dark-mode-toggle i {
+    font-size: 16px;
+    transition: transform 0.3s ease;
+}
+
+.dark-mode-toggle:hover i {
+    transform: rotate(180deg);
+}
+
+/* Dark mode body and general styles */
+body.dark-mode {
+    background-color: #1a1a1a !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode .container {
+    background-color: transparent;
+}
+
+/* Dark mode navbar */
+body.dark-mode .navbar {
+    background-color: #2d2d2d !important;
+    border-bottom-color: #404040 !important;
+}
+
+body.dark-mode .navbar.bg-white {
+    background-color: #2d2d2d !important;
+}
+
+body.dark-mode .navbar-brand {
+    color: #ff385c !important;
+}
+
+body.dark-mode .navbar-brand:hover {
+    color: #ff385c !important;
+}
+
+body.dark-mode .navbar-nav .nav-link {
+    color: #ffffff !important;
+}
+
+body.dark-mode .navbar-nav .nav-link:hover {
+    background-color: #404040 !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode .dropdown-toggle {
+    background-color: #2d2d2d !important;
+    border-color: #404040 !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode .dropdown-toggle:hover {
+    background-color: #404040 !important;
+    border-color: #555555 !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode .dropdown-toggle:focus {
+    background-color: #404040 !important;
+    border-color: #555555 !important;
+    color: #ffffff !important;
+    box-shadow: none !important;
+}
+
+/* Dark mode search bar */
+body.dark-mode .search-bar {
+    background-color: #2d2d2d;
+    border-color: #404040;
+}
+
+body.dark-mode .search-segment:hover {
+    background-color: #404040;
+}
+
+body.dark-mode .search-label {
+    color: #ffffff;
+}
+
+body.dark-mode .search-input {
+    color: #ffffff;
+}
+
+body.dark-mode .search-input::placeholder {
+    color: #aaaaaa;
+}
+
+body.dark-mode .search-divider {
+    background-color: #404040;
+}
+
+/* Dark mode category bar */
+body.dark-mode .category-bar {
+    background-color: #2d2d2d !important;
+    border-bottom-color: #404040;
+}
+
+body.dark-mode .category-bar.bg-white {
+    background-color: #2d2d2d !important;
+}
+
+body.dark-mode .category-item i {
+    color: #aaaaaa;
+}
+
+body.dark-mode .category-item.active i {
+    color: #ffffff;
+}
+
+body.dark-mode .category-item span {
+    color: #aaaaaa;
+}
+
+body.dark-mode .category-item.active span {
+    color: #ffffff;
+}
+
+body.dark-mode .category-item:hover {
+    border-bottom-color: #666666;
+}
+
+body.dark-mode .category-item.active {
+    border-bottom-color: #ffffff;
+}
+
+/* Dark mode filter controls */
+body.dark-mode .filter-btn {
+    background-color: #2d2d2d;
+    border-color: #404040;
+    color: #ffffff;
+}
+
+body.dark-mode .filter-btn:hover {
+    border-color: #666666;
+}
+
+body.dark-mode .toggle-label {
+    color: #ffffff;
+}
+
+body.dark-mode .toggle-switch label {
+    background-color: #404040;
+}
+
+body.dark-mode .toggle-switch input:checked + label {
+    background-color: #ff385c;
+}
+
+body.dark-mode .toggle-switch label:before {
+    background-color: #ffffff;
+}
+
+/* Dark mode scroll buttons */
+body.dark-mode .scroll-btn {
+    background-color: #2d2d2d;
+    border-color: #404040;
+}
+
+body.dark-mode .scroll-btn i {
+    color: #ffffff;
+}
+
+/* Dark mode cards */
+body.dark-mode .card {
+    background-color: #2d2d2d !important;
+    border-color: #404040 !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode .card-body {
+    color: #ffffff !important;
+}
+
+body.dark-mode .card-text {
+    color: #ffffff !important;
+}
+
+body.dark-mode .card-text b {
+    color: #ffffff !important;
+}
+
+/* Dark mode forms */
+body.dark-mode .form-control {
+    background-color: #2d2d2d;
+    border-color: #404040;
+    color: #ffffff;
+}
+
+body.dark-mode .form-control:focus {
+    background-color: #2d2d2d;
+    border-color: #ff385c;
+    color: #ffffff;
+    box-shadow: 0 0 0 0.2rem rgba(255, 56, 92, 0.25);
+}
+
+body.dark-mode .form-control::placeholder {
+    color: #aaaaaa;
+}
+
+body.dark-mode .form-label {
+    color: #ffffff;
+}
+
+/* Dark mode buttons */
+body.dark-mode .btn-dark {
+    background-color: #404040;
+    border-color: #404040;
+}
+
+body.dark-mode .btn-dark:hover {
+    background-color: #555555;
+    border-color: #555555;
+}
+
+body.dark-mode .btn-outline-dark {
+    color: #ffffff;
+    border-color: #404040;
+}
+
+body.dark-mode .btn-outline-dark:hover {
+    background-color: #404040;
+    border-color: #404040;
+    color: #ffffff;
+}
+
+body.dark-mode .btn-outline-primary {
+    color: #ff385c;
+    border-color: #ff385c;
+}
+
+body.dark-mode .btn-outline-primary:hover {
+    background-color: #ff385c;
+    border-color: #ff385c;
+    color: #ffffff;
+}
+
+body.dark-mode .btn-outline-secondary {
+    color: #aaaaaa;
+    border-color: #404040;
+}
+
+body.dark-mode .btn-outline-secondary:hover {
+    background-color: #404040;
+    border-color: #404040;
+    color: #ffffff;
+}
+
+/* Dark mode footer */
+body.dark-mode .footer {
+    background-color: #2d2d2d !important;
+    border-top-color: #404040 !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode .f-info {
+    background-color: #2d2d2d !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode .f-info-links a {
+    color: #aaaaaa !important;
+}
+
+body.dark-mode .f-info-links a:hover {
+    color: #ffffff !important;
+}
+
+body.dark-mode .f-info-social i {
+    color: #aaaaaa !important;
+}
+
+body.dark-mode .f-info-social i:hover {
+    color: #ffffff !important;
+}
+
+/* Dark mode alerts and flash messages */
+body.dark-mode .alert {
+    background-color: #2d2d2d;
+    border-color: #404040;
+    color: #ffffff;
+}
+
+body.dark-mode .alert-success {
+    background-color: #1a4d1a;
+    border-color: #2d5a2d;
+    color: #90ee90;
+}
+
+body.dark-mode .alert-danger {
+    background-color: #4d1a1a;
+    border-color: #5a2d2d;
+    color: #ffcccc;
+}
+
+body.dark-mode .alert-info {
+    background-color: #1a3a4d;
+    border-color: #2d4a5a;
+    color: #cceeff;
+}
+
+body.dark-mode .alert-warning {
+    background-color: #4d3a1a;
+    border-color: #5a4a2d;
+    color: #fff2cc;
+}
+
+/* Dark mode search results */
+body.dark-mode .search-results-header {
+    background-color: #2d2d2d;
+    border-left-color: #ff385c;
+    color: #ffffff;
+}
+
+body.dark-mode .search-results-header h3 {
+    color: #ffffff;
+}
+
+body.dark-mode .search-results-header p {
+    color: #aaaaaa;
+}
+
+/* Dark mode map fallback */
+body.dark-mode .map-fallback {
+    background-color: #2d2d2d;
+    color: #aaaaaa;
+}
+
+/* Dark mode toggle button in dark mode */
+body.dark-mode .dark-mode-toggle {
+    background-color: #2d2d2d;
+    border-color: #404040;
+    color: #ffffff;
+}
+
+body.dark-mode .dark-mode-toggle:hover {
+    border-color: #ff385c;
+    background-color: #404040;
+}
+
+/* Ensure moon icon is black in light mode and white in dark mode */
+.dark-mode-toggle i {
+    color: #222222;
+}
+
+body.dark-mode .dark-mode-toggle i {
+    color: #ffffff;
+}
+
+/* Dark mode carousel */
+body.dark-mode .carousel-control-prev,
+body.dark-mode .carousel-control-next {
+    background-color: rgba(45, 45, 45, 0.8);
+}
+
+body.dark-mode .carousel-indicators button {
+    background-color: #666666;
+}
+
+body.dark-mode .carousel-indicators button.active {
+    background-color: #ffffff;
+}
+
+/* Dark mode text colors */
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6 {
+    color: #ffffff !important;
+}
+
+body.dark-mode p {
+    color: #ffffff !important;
+}
+
+body.dark-mode .text-muted {
+    color: #aaaaaa !important;
+}
+
+body.dark-mode .text-center {
+    color: #ffffff !important;
+}
+
+/* Dark mode links */
+body.dark-mode a {
+    color: #ff385c !important;
+}
+
+body.dark-mode a:hover {
+    color: #ff6b8a !important;
+}
+
+body.dark-mode .return {
+    color: #ffffff !important;
+}
+
+body.dark-mode .return:hover {
+    color: #ff385c !important;
+}
+
+/* Dark mode listing link */
+body.dark-mode .listing-link {
+    color: inherit !important;
+}
+
+/* Dark mode form validation */
+body.dark-mode .valid-feedback {
+    color: #90ee90 !important;
+}
+
+body.dark-mode .invalid-feedback {
+    color: #ffcccc !important;
+}
+
+/* Dark mode table */
+body.dark-mode .table {
+    color: #ffffff;
+}
+
+body.dark-mode .table-striped > tbody > tr:nth-of-type(odd) > td {
+    background-color: #404040;
+}
+
+/* Dark mode modal */
+body.dark-mode .modal-content {
+    background-color: #2d2d2d;
+    border-color: #404040;
+    color: #ffffff;
+}
+
+body.dark-mode .modal-header {
+    border-bottom-color: #404040;
+}
+
+body.dark-mode .modal-footer {
+    border-top-color: #404040;
+}
+
+/* Dark mode dropdown menus */
+body.dark-mode .dropdown-menu {
+    background-color: #2d2d2d;
+    border-color: #404040;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .dropdown-item {
+    color: #ffffff;
+}
+
+body.dark-mode .dropdown-item:hover,
+body.dark-mode .dropdown-item:focus {
+    background-color: #404040;
+    color: #ffffff;
+}
+
+body.dark-mode .dropdown-divider {
+    border-top-color: #404040;
+}
+
+/* Dark mode close buttons */
+body.dark-mode .btn-close {
+    filter: invert(1);
+}
+
+body.dark-mode .btn-close:hover {
+    filter: invert(1) brightness(1.2);
+}
+
+/* Responsive adjustments for dark mode */
+@media (max-width: 768px) {
+    .dark-mode-toggle {
+        bottom: 90px; /* Adjust for mobile chatbot button position */
+        right: 15px;
+        width: 55px !important;
+        height: 55px !important;
+        min-width: 55px !important;
+        min-height: 55px !important;
+        max-width: 55px !important;
+        max-height: 55px !important;
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 576px) {
+    .dark-mode-toggle {
+        bottom: 90px; /* Keep above chatbot button on mobile */
+        right: 10px;
+        width: 50px !important;
+        height: 50px !important;
+        min-width: 50px !important;
+        min-height: 50px !important;
+        max-width: 50px !important;
+        max-height: 50px !important;
+        font-size: 16px;
+    }
+}

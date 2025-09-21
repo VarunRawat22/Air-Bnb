@@ -1,0 +1,234 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Complete Your Payment</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <img src="<%= booking.listing.image %>" class="img-fluid rounded" alt="<%= booking.listing.title %>">
+                        </div>
+                        <div class="col-md-8">
+                            <h5><%= booking.listing.title %></h5>
+                            <p class="text-muted"><%= booking.listing.location %>, <%= booking.listing.country %></p>
+                            <p class="text-muted">
+                                <%= new Date(booking.checkIn).toLocaleDateString() %> - <%= new Date(booking.checkOut).toLocaleDateString() %>
+                                (<%= booking.nights %> nights, <%= booking.guests %> guest<%= booking.guests > 1 ? 's' : '' %>)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="price-breakdown mb-4">
+                        <h6>Payment Summary</h6>
+                        <div class="row">
+                            <div class="col-6">₹<%= booking.listing.price.toLocaleString('en-IN') %> × <%= booking.nights %> nights</div>
+                            <div class="col-6 text-end">₹<%= (booking.listing.price * booking.nights).toLocaleString('en-IN') %></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">Service fee (3%)</div>
+                            <div class="col-6 text-end">₹<%= booking.commission.toLocaleString('en-IN') %></div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-6"><strong>Total</strong></div>
+                            <div class="col-6 text-end"><strong>₹<%= booking.totalPrice.toLocaleString('en-IN') %></strong></div>
+                        </div>
+                    </div>
+
+                    <form id="payment-form">
+                        <div class="mb-3">
+                            <label for="card-element" class="form-label">Credit or Debit Card</label>
+                            <div id="card-element" class="form-control">
+                                <!-- Stripe Elements will create input elements here -->
+                            </div>
+                            <div id="card-errors" class="text-danger mt-2" role="alert"></div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg w-100" id="submit-button">
+                            <span id="button-text">Pay ₹<%= booking.totalPrice.toLocaleString('en-IN') %></span>
+                            <div class="spinner-border spinner-border-sm d-none" id="spinner" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </button>
+                    </form>
+
+                    <div class="mt-3 text-center">
+                        <small class="text-muted">
+                            Your payment is secured by Stripe. We never store your card details.
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h6>Booking Details</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>Property:</strong><br>
+                        <%= booking.listing.title %>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Check-in:</strong><br>
+                        <%= new Date(booking.checkIn).toLocaleDateString() %>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Check-out:</strong><br>
+                        <%= new Date(booking.checkOut).toLocaleDateString() %>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Guests:</strong><br>
+                        <%= booking.guests %> guest<%= booking.guests > 1 ? 's' : '' %>
+                    </div>
+                    <% if (booking.specialRequests) { %>
+                        <div class="mb-3">
+                            <strong>Special Requests:</strong><br>
+                            <%= booking.specialRequests %>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6>Payment Security</h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-shield-alt text-success me-2"></i>
+                        <small>256-bit SSL encryption</small>
+                    </div>
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-lock text-success me-2"></i>
+                        <small>PCI DSS compliant</small>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-check-circle text-success me-2"></i>
+                        <small>Secure payment processing</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Stripe.js -->
+<script src="https://js.stripe.com/v3/"></script>
+
+<script>
+// Initialize Stripe
+const stripe = '<%= process.env.STRIPE_PUBLISHABLE_KEY %>' ? Stripe('<%= process.env.STRIPE_PUBLISHABLE_KEY %>') : null;
+
+if (!stripe) {
+    document.getElementById('card-element').innerHTML = '<div class="alert alert-warning">Payment system is not configured. Please contact support.</div>';
+    document.getElementById('submit-button').disabled = true;
+} else {
+    const elements = stripe.elements();
+
+    // Create card element
+    const card = elements.create('card', {
+    style: {
+        base: {
+            fontSize: '16px',
+            color: '#424770',
+            '::placeholder': {
+                color: '#aab7c4',
+            },
+        },
+        invalid: {
+            color: '#9e2146',
+        },
+    },
+});
+
+    // Mount card element
+    card.mount('#card-element');
+
+    // Handle form submission
+    const form = document.getElementById('payment-form');
+    const submitButton = document.getElementById('submit-button');
+    const buttonText = document.getElementById('button-text');
+    const spinner = document.getElementById('spinner');
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        
+        // Disable submit button
+        submitButton.disabled = true;
+        buttonText.classList.add('d-none');
+        spinner.classList.remove('d-none');
+
+        try {
+            // Create payment intent
+            const response = await fetch(`/bookings/<%= booking._id %>/create-payment-intent`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to create payment');
+            }
+
+            // Confirm payment
+            const { error, paymentIntent } = await stripe.confirmCardPayment(data.clientSecret, {
+                payment_method: {
+                    card: card,
+                    billing_details: {
+                        name: '<%= currentUser.username || currentUser.email %>',
+                        email: '<%= currentUser.email %>',
+                    },
+                },
+            });
+
+            if (error) {
+                // Handle payment error
+                const errorElement = document.getElementById('card-errors');
+                errorElement.textContent = error.message;
+                
+                // Re-enable submit button
+                submitButton.disabled = false;
+                buttonText.classList.remove('d-none');
+                spinner.classList.add('d-none');
+            } else {
+                // Payment successful
+                if (paymentIntent.status === 'succeeded') {
+                    // Redirect to success page
+                    window.location.href = `/bookings/payment/success?paymentIntentId=${paymentIntent.id}`;
+                }
+            }
+        } catch (error) {
+            console.error('Payment error:', error);
+            
+            // Show error message
+            const errorElement = document.getElementById('card-errors');
+            errorElement.textContent = error.message || 'An error occurred during payment. Please try again.';
+            
+            // Re-enable submit button
+            submitButton.disabled = false;
+            buttonText.classList.remove('d-none');
+            spinner.classList.add('d-none');
+        }
+    });
+
+    // Handle card element errors
+    card.addEventListener('change', ({error}) => {
+        const displayError = document.getElementById('card-errors');
+        if (error) {
+            displayError.textContent = error.message;
+        } else {
+            displayError.textContent = '';
+        }
+    });
+}
+</script> 

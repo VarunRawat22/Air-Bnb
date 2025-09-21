@@ -1,0 +1,84 @@
+<% layout('layouts/boilerplate') %>
+
+  <body>
+    <% if (typeof searchParams !== 'undefined' && searchParams.location) { %>
+      <div class="search-results-header mb-4">
+        <h3>Search Results</h3>
+        <p class="text-muted">
+          <% if (searchParams.location) { %>
+            <strong>Location:</strong> <%= searchParams.location %>
+          <% } %>
+          <% if (searchParams.checkin && searchParams.checkout) { %>
+            | <strong>Dates:</strong> <%= new Date(searchParams.checkin).toLocaleDateString() %> - <%= new Date(searchParams.checkout).toLocaleDateString() %>
+          <% } %>
+          <% if (searchParams.guests) { %>
+            | <strong>Guests:</strong> <%= searchParams.guests %>
+          <% } %>
+          <% if (searchParams.category) { %>
+            | <strong>Category:</strong> <%= searchParams.category %>
+          <% } %>
+        </p>
+        <p class="text-muted"><%= allListings.length %> listing<%= allListings.length !== 1 ? 's' : '' %> found</p>
+        <a href="/listings" class="btn btn-outline-secondary btn-sm">Clear Search</a>
+      </div>
+    <% } else { %>
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3>All Listings</h3>
+        <div class="btn-group" role="group">
+          <button type="button" class="btn btn-outline-primary active" id="list-view-btn">
+            <i class="fa-solid fa-list"></i> List View
+          </button>
+          <button type="button" class="btn btn-outline-primary" id="map-view-btn">
+            <i class="fa-solid fa-map"></i> Map View
+          </button>
+        </div>
+      </div>
+    <% } %>
+    
+    <!-- List View -->
+    <div id="list-view">
+      <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1">
+        <% for(let listing of allListings){ %>
+          <a href="/listings/<%= listing._id%>" class="listing-link">
+          <div class="card col listing-card" 
+               data-id="<%= listing._id %>" 
+               data-lat="<%= listing.geometry && listing.geometry.coordinates ? listing.geometry.coordinates[1] : '' %>" 
+               data-lng="<%= listing.geometry && listing.geometry.coordinates ? listing.geometry.coordinates[0] : '' %>">
+            <% 
+              let displayImage;
+              if (listing.images && listing.images.length > 0) {
+                displayImage = listing.images[0].url;
+              } else if (typeof listing.image === 'object' && listing.image !== null && listing.image.url) {
+                displayImage = listing.image.url;
+              } else {
+                displayImage = listing.image;
+              }
+            %>
+            <img src="<%= displayImage %>" class="card-img-top" alt="listing_image" style="height: 20rem; object-fit: cover;"/>
+            <div class="card-img-overlay"></div>
+            <div class="card-body">
+              <p class="card-text">
+                <b><%= listing.title %></b>
+                <br />
+                &#8377; <%= listing.price.toLocaleString("en-IN") %>
+              </p>
+          </div>
+      </div>
+       </a>
+        <% } %>
+      </div>
+    </div>
+    
+    <!-- Map View -->
+    <div id="map-view" style="display: none;">
+      <div id="map" style="height: 600px; width: 100%; border-radius: 8px;"></div>
+    </div>
+    
+    <% if (allListings.length === 0 && typeof searchParams !== 'undefined') { %>
+      <div class="text-center py-5">
+        <h4>No listings found</h4>
+        <p class="text-muted">Try adjusting your search criteria</p>
+        <a href="/listings" class="btn btn-primary">Browse All Listings</a>
+      </div>
+    <% } %>
+    

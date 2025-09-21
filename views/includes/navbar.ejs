@@ -1,0 +1,146 @@
+<!-- Main Navbar -->
+<nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
+  <div class="container-fluid px-4">
+    <!-- Logo -->
+    <a class="navbar-brand" href="/">
+      <i class="fa-solid fa-compass text-danger"></i>
+      <span class="ms-2 fw-bold text-danger">airbnb</span>
+    </a>
+
+    <!-- Search Bar -->
+    <div class="search-container mx-auto">
+      <form class="search-bar" action="/listings/search" method="GET">
+        <div class="search-segment">
+          <label class="search-label">Where</label>
+          <input type="text" name="location" placeholder="Search destinations" class="search-input">
+        </div>
+        <div class="search-divider"></div>
+        <div class="search-segment">
+          <label class="search-label">Check in</label>
+          <input type="date" name="checkin" class="search-input">
+        </div>
+        <div class="search-divider"></div>
+        <div class="search-segment">
+          <label class="search-label">Check out</label>
+          <input type="date" name="checkout" class="search-input">
+        </div>
+        <div class="search-divider"></div>
+        <div class="search-segment">
+          <label class="search-label">Who</label>
+          <input type="number" name="guests" placeholder="Add guests" min="1" max="16" class="search-input">
+        </div>
+        <button type="submit" class="search-button">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </form>
+    </div>
+
+    <!-- Right Navigation -->
+    <div class="navbar-nav ms-auto align-items-center">
+      <a class="nav-link me-3" href="/listings/new">
+        <span class="d-none d-md-inline">Airbnb your home</span>
+      </a>
+      <a class="nav-link me-3" href="#">
+        <i class="fa-solid fa-globe"></i>
+      </a>
+      <div class="dropdown">
+        <button class="btn btn-outline-dark dropdown-toggle" type="button" data-bs-toggle="dropdown">
+          <i class="fa-solid fa-bars me-2"></i>
+          <i class="fa-solid fa-circle-user"></i>
+        </button>
+        <ul class="dropdown-menu">
+          <% if(!currentUser){ %>
+            <li><a class="dropdown-item" href="/signup">Sign up</a></li>
+            <li><a class="dropdown-item" href="/login">Log in</a></li>
+          <% } %>
+          <% if(currentUser){ %>
+            <li><a class="dropdown-item" href="/bookings">My Bookings</a></li>
+            <li><a class="dropdown-item" href="/listings/new">Host your home</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/logout">Log out</a></li>
+          <% } %>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Category Filters Bar -->
+<div class="category-bar bg-white border-bottom">
+  <div class="container-fluid px-4">
+    <div class="category-scroll">
+      <button class="scroll-btn scroll-left">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+      
+      <div class="category-list">
+        <div class="category-item">
+          <i class="fa-solid fa-mug-hot"></i>
+          <span>Bed & breakfasts</span>
+        </div>
+        <div class="category-item">
+          <i class="fa-solid fa-campground"></i>
+          <span>Camping</span>
+        </div>
+        <div class="category-item">
+          <i class="fa-solid fa-chess-rook"></i>
+          <span>Castles</span>
+        </div>
+        <div class="category-item">
+          <i class="fa-solid fa-mountain"></i>
+          <span>Top of the world</span>
+        </div>
+        <div class="category-item">
+          <i class="fa-solid fa-snowflake"></i>
+          <span>Arctic</span>
+        </div>
+        <div class="category-item">
+          <i class="fa-solid fa-seedling"></i>
+          <span>Vineyards</span>
+        </div>
+        <div class="category-item">
+          <i class="fa-solid fa-circle"></i>
+          <span>Domes</span>
+        </div>
+        <div class="category-item">
+          <i class="fa-solid fa-building"></i>
+          <span>Design</span>
+        </div>
+        <div class="category-item">
+          <i class="fa-solid fa-house"></i>
+          <span>A-frames</span>
+        </div>
+        <div class="category-item">
+          <i class="fa-solid fa-tree"></i>
+          <span>Treehouses</span>
+        </div>
+        <div class="category-item">
+          <i class="fa-solid fa-water"></i>
+          <span>Lakefront</span>
+        </div>
+        <div class="category-item">
+          <i class="fa-solid fa-umbrella-beach"></i>
+          <span>Beachfront</span>
+        </div>
+      </div>
+      
+      <button class="scroll-btn scroll-right">
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
+    </div>
+    
+    <div class="filter-controls">
+      <button class="filter-btn">
+        <i class="fa-solid fa-sliders"></i>
+        <span>Filters</span>
+      </button>
+      <div class="toggle-container">
+        <span class="toggle-label">Display total before taxes</span>
+        <div class="toggle-switch">
+          <input type="checkbox" id="tax-toggle">
+          <label for="tax-toggle"></label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

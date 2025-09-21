@@ -1,0 +1,106 @@
+<% layout('layouts/boilerplate') %>
+<div class="row mt-3">
+  <div class="col-8" offset-2>
+  <body>
+    <h3>Edit your Listing</h3>
+    <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="needs-validation" enctype="multipart/form-data">
+      <div class="mb-3">
+        <label for="title" class="form-label">Title:</label>
+        <input name="listing[title]" value="<%= listing.title %>" type="text" class="form-control" required/>
+        <div class="valid-feedback">
+          Title looks good!
+          </div>
+      </div>
+
+
+      <div class="mb-3">
+        <label for="description" class="form-label">Description:</label>
+        <textarea name="listing[description]" class="form-control" required><%= listing.description %></textarea>
+        <div class="invalid-feedback">
+          Please provide a description.
+      </div>
+
+      <!-- Display existing images -->
+      <% if (listing.images && listing.images.length > 0) { %>
+      <div class="mb-3">
+        <label class="form-label">Current Images:</label>
+        <div class="row">
+          <% listing.images.forEach(function(img, index) { %>
+          <div class="col-md-3 mb-2">
+            <div class="card">
+              <img src="<%= img.url %>" class="card-img-top" style="height: 150px; object-fit: cover;" alt="Listing image">
+              <div class="card-body p-2">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" name="deleteImages" value="<%= img.filename %>" id="delete<%= index %>">
+                  <label class="form-check-label text-danger" for="delete<%= index %>">
+                    <small>Delete</small>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <% }); %>
+        </div>
+        <small class="text-muted">Check the boxes above to delete selected images</small>
+      </div>
+      <% } %>
+
+      <!-- Upload new images -->
+      <div class="mb-3">
+        <label for="images" class="form-label">Upload New Images:</label>
+        <input name="images" type="file" class="form-control" multiple accept="image/*" />
+        <div class="form-text">You can select multiple images (max 10, 5MB each). Supported formats: JPG, PNG, GIF, WebP</div>
+      </div>
+
+      <!-- Fallback image URL input -->
+      <div class="mb-3">
+        <label for="image_url" class="form-label">Or provide Image URL:</label>
+        <% 
+          let imageValue;
+          if(typeof listing.image === 'object' && listing.image !== null && listing.image.url) {
+            imageValue = listing.image.url;
+          } else {
+            imageValue = listing.image;
+          }
+        %>
+        <input name="listing[image]" value="<%= imageValue %>" type="text" class="form-control" placeholder="enter image URL/Link (optional if uploading files)" />
+        <div class="form-text">Use this field if you want to provide an image URL instead of uploading files</div>
+      </div>
+
+      <div class="row">
+      <div class="mb-3 col-md-4">
+        <label for="price" class="form-label">Price:</label>
+      <input name="listing[price]" value="<%= listing.price %>" type="number" class="form-control" required/>
+      <div class="invalid-feedback">
+        Price should be valid.
+      </div>
+      <div class="mb-3 col-md-8">
+        <label for="country" class="form-label">Country:</label>
+      <input class="form-control"
+        name="listing[location]"
+        value="<%= listing.location %>"
+        type="text"
+        required
+      />
+      <div class="invalid-feedback">
+        Provide a valid country.
+      </div>
+      </div>
+      <div class="mb-3">
+        <label for="location" class="form-label">Location:</label>
+      <input class="form-control"
+        name="listing[country]"
+        value="<%= listing.country %>"
+        type="text"
+        required
+      />
+      <div class="invalid-feedback">
+        Provide a valid location.
+      </div>
+      
+      <button class="btn btn-dark edit-btn mt-3">Edit</button>
+    </form>
+  </body>
+  </div>
+</div>
+

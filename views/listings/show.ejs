@@ -1,0 +1,391 @@
+<% layout('layouts/boilerplate') %>
+<div class="row mt-3">
+  <div class="col-8 offset-3">
+    <h3><%= listing.title %>  :</h3>
+  </div>
+
+    <% 
+      let imageUrl;
+      if(typeof listing.image === 'object' && listing.image !== null && listing.image.url) {
+        imageUrl = listing.image.url;
+      } else {
+        imageUrl = listing.image;
+      }
+    %>
+    <div class="card col-6 offset-3 show-card listing-card">
+      <img src="<%= imageUrl %>" alt="<%= listing.title %> class="card-img-top show-img" style="height: 20rem;"/>
+      <div class="card-body">
+        <p class="card-text"><b>Owned By:</b> <i><%= listing.owner ? listing.owner.username : 'Unknown Owner' %></i></p>
+        
+        <p class="card-text"><b>Description:</b><%= listing.description %></p>
+        
+        <p class="card-text"><b>Price:</b>&#8377; <%= listing.price.toLocaleString("en-IN") %></p>
+        
+        <p class="card-text"><b>Location:</b> <%= listing.location %></p>
+        
+        <p class="card-text"><b>Country:</b> <%= listing.country %></p>
+        
+        <div class="mt-3">
+          <% if(currentUser && listing.owner && !listing.owner._id.equals(currentUser._id)){ %>
+            <!-- User is logged in and not the owner - show Book Now button -->
+            <a href="/bookings/new/<%= listing._id %>" class="btn btn-primary btn-lg w-100">
+              <i class="fas fa-calendar-check me-2"></i>Book Now
+            </a>
+          <% } else if(currentUser && listing.owner && listing.owner._id.equals(currentUser._id)){ %>
+            <!-- User is the owner - show message -->
+            <div class="alert alert-info text-center">
+              <i class="fas fa-info-circle me-2"></i>This is your listing. You cannot book your own property.
+            </div>
+          <% } else if(!listing.owner){ %>
+            <!-- Listing has no owner - show unavailable message -->
+            <div class="alert alert-warning text-center">
+              <i class="fas fa-exclamation-triangle me-2"></i>This listing is currently unavailable for booking
+            </div>
+          <% } else if(!currentUser){ %>
+            <!-- User is not logged in - show Login to Book button -->
+            <a href="/login" class="btn btn-success btn-lg w-100">
+              <i class="fas fa-sign-in-alt me-2"></i>Login to Book
+            </a>
+            <small class="text-muted d-block mt-2 text-center">
+              <i class="fas fa-info-circle me-1"></i>You need to be logged in to make a booking
+            </small>
+          <% } else { %>
+            <!-- Fallback case -->
+            <div class="alert alert-warning text-center">
+              <i class="fas fa-exclamation-triangle me-2"></i>Unable to determine booking status
+            </div>
+          <% } %>
+        </div>
+        
+        <br />
+      </div>
+    </div>
+    
+    <!-- Map Section -->
+    <div class="col-8 offset-3 mb-4">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">
+            <i class="fa-solid fa-map-marker-alt text-danger me-2"></i>
+            Location Map
+          </h5>
+          <% if(currentUser && listing.owner && listing.owner._id.equals(currentUser._id) && (!listing.geometry || !listing.geometry.coordinates || listing.geometry.coordinates.length === 0)) { %>
+            <form method="POST" action="/listings/<%= listing._id %>/geocode" style="display: inline;">
+              <button type="submit" class="btn btn-sm btn-outline-primary">
+                <i class="fa-solid fa-map-marker-alt"></i> Update Coordinates
+              </button>
+            </form>
+          <% } %>
+        </div>
+        <div class="card-body p-0">
+          <div id="listing-map" style="height: 400px; width: 100%; border-radius: 0 0 8px 8px;"></div>
+        </div>
+      </div>
+    </div>
+    
+    <br />
+<!-- Adding authentication jab currentUser ki id an owenr ki id same hogi tbhi wo listing ko dlt ya edit kr payega -->
+    <% if(currentUser && listing.owner && listing.owner._id.equals(currentUser._id)){ %>
+    <div class="btns">
+    <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark col-1 offset-3 edit-btn">Edit</a>
+    <br /><br />
+    <form method="POST" action="/listings/<%=listing._id%>?_method=DELETE">
+      <button class="btn btn-dark offset-3">Delete</button>
+    </form>
+    </div>
+    <% } %>
+   
+  
+  <div class="col-8 offset-3 mb-3">
+    <hr>
+     <% if(currentUser){ %>
+    <h4>Leave A Review</h4>
+    <form action="/listings/<%= listing._id%>/reviews" method="POST" novalidate class="needs-validation">
+      <!-- <div class="mb-3 mt-3">
+        <lable for="rating" class="form-label" >Rating</lable>
+        <input type="range" min="1" max="5" id="rating" name="review[rating]" class="form-range">
+      </div> -->
+      <div class="mb-3 mt-3">
+         <lable for="rating" class="form-label" >Rating</lable>
+
+      <fieldset class="starability-slot">
+   <label for="rate1" title="1 stars"></label> 
+  <input type="radio" id="rate1" name="review[rating]" value="1" checked />  <!-- Added 'checked' attribute here -->
+  
+  <label for="rate2" title="2 stars"></label>
+  <input type="radio" id="rate2" name="review[rating]" value="2" />
+
+  <label for="rate3" title="3 stars"></label>
+  <input type="radio" id="rate3" name="review[rating]" value="3" />
+
+  <label for="rate4" title="4 stars"></label>
+  <input type="radio" id="rate4" name="review[rating]" value="4" />
+
+  <label for="rate5" title="5 star"></label>
+  <input type="radio" id="rate5" name="review[rating]" value="5" />
+
+</fieldset>
+</div>
+
+      <div class="mb-3 mt-3">
+        <label for="comment" >comments</label>
+        <textarea name="review[comment]" id="comment" cols="30" rows="5" class="form-control" required></textarea>
+        <div class="invalid-feedback">
+          Please add some comment for review
+        </div>
+      </div>
+      <button class="btn btn-outline-dark">Submit</button>
+    </form>
+   
+    <hr>
+     <% } %>
+    <p><b>All Reviews</b></p>
+    <div class="row">           
+
+    <% for (let review of listing.reviews) { %>
+    <div class="card col-5 ms-3 mb-3"> 
+        <div class="card-body">
+            <h5 class="card-title"><%= review.author.username %></h5>
+            <p class="starability-result card-text" data-rating="<%= review.rating %>">
+</p>
+            <p class="card-text"><%= review.comment %></p>
+
+        </div>
+
+        <form class="mb-3" method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
+            <button class="btn btn-dark btn-sm">Delete</button>
+        </form>
+    </div>
+<% } %>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- Custom Popup Styles -->
+<style>
+.custom-popup .leaflet-popup-content-wrapper {
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.custom-popup .leaflet-popup-content {
+    margin: 0;
+    line-height: 1.4;
+}
+
+.custom-popup .leaflet-popup-tip {
+    background: white;
+    border: 1px solid #ccc;
+}
+</style>
+
+<!-- Map Script -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get listing data from the page
+    const listingData = {
+        title: '<%= listing.title %>',
+        location: '<%= listing.location %>',
+        price: '<%= listing.price.toLocaleString("en-IN") %>',
+        image: '<%= imageUrl %>',
+        geometry: <%- JSON.stringify(listing.geometry || null) %>
+    };
+    
+    console.log('Listing data:', listingData);
+    
+    // Initialize map
+    let map;
+    
+    // Check if we have valid coordinates
+    const hasValidCoordinates = listingData.geometry && 
+                               listingData.geometry.coordinates && 
+                               listingData.geometry.coordinates.length >= 2 &&
+                               listingData.geometry.coordinates[0] !== 0 &&
+                               listingData.geometry.coordinates[1] !== 0;
+    
+    if (hasValidCoordinates) {
+        // Use actual coordinates from the listing
+        const [lng, lat] = listingData.geometry.coordinates;
+        console.log('Using actual coordinates:', lat, lng);
+        
+        // Initialize Leaflet map
+        map = L.map('listing-map').setView([lat, lng], 13);
+        
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+        
+        // Add marker for the listing
+        const marker = L.marker([lat, lng]).addTo(map);
+        
+        // Create popup content
+        const popupContent = `
+            <div style="width: 280px; padding: 8px;">
+                <img src="${listingData.image}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 4px; margin-bottom: 8px;">
+                <h6 style="margin: 0 0 6px 0; font-weight: bold; color: #333;">${listingData.title}</h6>
+                <p style="margin: 0 0 6px 0; color: #666; font-size: 14px;">₹${listingData.price}</p>
+                <p style="margin: 0 0 8px 0; font-size: 13px; color: #2c5aa0; font-weight: 500;">
+                    <i class="fa-solid fa-map-marker-alt" style="margin-right: 4px;"></i>${listingData.location}
+                </p>
+                <small style="color: #28a745; font-style: italic;">
+                    <i class="fa-solid fa-check-circle" style="margin-right: 4px;"></i>Exact location
+                </small>
+            </div>
+        `;
+        
+        marker.bindPopup(popupContent, {
+            maxWidth: 300,
+            className: 'custom-popup'
+        }).openPopup();
+        
+    } else {
+        // Fallback: Show a general area map based on location name
+        // For India, we'll center on a general location
+        const fallbackCoords = {
+            'delhi': [28.7041, 77.1025],
+            'mumbai': [19.0760, 72.8777],
+            'bangalore': [12.9716, 77.5946],
+            'chennai': [13.0827, 80.2707],
+            'kolkata': [22.5726, 88.3639],
+            'hyderabad': [17.3850, 78.4867],
+            'pune': [18.5204, 73.8567],
+            'ahmedabad': [23.0225, 72.5714],
+            'jaipur': [26.9124, 75.7873],
+            'lucknow': [26.8467, 80.9462],
+            'costa rica': [9.9281, -84.0907],
+            'san jose': [9.9281, -84.0907],
+            'liberia': [10.6333, -85.4333],
+            'tamarindo': [10.3000, -85.8333],
+            'monteverde': [10.3000, -84.8167],
+            'arenal': [10.4633, -84.7033],
+            'manuel antonio': [9.3927, -84.1397],
+            'tortuguero': [10.5333, -83.5167],
+            'puerto viejo': [9.6500, -82.7500],
+            'la fortuna': [10.4700, -84.6500],
+            'los angeles': [34.0522, -118.2437],
+            'la': [34.0522, -118.2437],
+            'united states': [39.8283, -98.5795],
+            'usa': [39.8283, -98.5795],
+            'america': [39.8283, -98.5795]
+        };
+        
+        // Try to find coordinates based on location name
+        const locationLower = listingData.location.toLowerCase();
+        let foundCoords = null;
+        
+        for (const [city, coords] of Object.entries(fallbackCoords)) {
+            if (locationLower.includes(city)) {
+                foundCoords = coords;
+                break;
+            }
+        }
+        
+        if (foundCoords) {
+            // Show map with approximate location
+            const [lat, lng] = foundCoords;
+            console.log('Using fallback coordinates for:', listingData.location, ':', lat, lng);
+            
+            map = L.map('listing-map').setView([lat, lng], 10);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+            
+            // Add marker with approximate location indicator
+            const marker = L.marker([lat, lng]).addTo(map);
+            
+            const popupContent = `
+                <div style="width: 280px; padding: 8px;">
+                    <img src="${listingData.image}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 4px; margin-bottom: 8px;">
+                    <h6 style="margin: 0 0 6px 0; font-weight: bold; color: #333;">${listingData.title}</h6>
+                    <p style="margin: 0 0 6px 0; color: #666; font-size: 14px;">₹${listingData.price}</p>
+                    <p style="margin: 0 0 8px 0; font-size: 13px; color: #2c5aa0; font-weight: 500;">
+                        <i class="fa-solid fa-map-marker-alt" style="margin-right: 4px;"></i>${listingData.location}
+                    </p>
+                    <small style="color: #ff6b6b; font-style: italic;">
+                        <i class="fa-solid fa-exclamation-triangle" style="margin-right: 4px;"></i>Approximate location
+                    </small>
+                </div>
+            `;
+            
+            marker.bindPopup(popupContent, {
+                maxWidth: 300,
+                className: 'custom-popup'
+            }).openPopup();
+            
+        } else {
+            // Show a message if no coordinates are available
+            console.log('No coordinates found for:', listingData.location);
+            const mapContainer = document.getElementById('listing-map');
+            mapContainer.innerHTML = `
+                <div class="map-fallback">
+                    <div class="text-center">
+                        <i class="fa-solid fa-map-marker-alt fa-3x mb-3"></i>
+                        <p class="mb-0">Location coordinates not available</p>
+                        <small>${listingData.location}</small>
+                        <br><br>
+                        <button class="btn btn-sm btn-outline-primary" onclick="retryGeocoding()">
+                            <i class="fa-solid fa-sync-alt"></i> Retry Geocoding
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+    }
+});
+
+// Function to retry geocoding
+function retryGeocoding() {
+    const listingId = '<%= listing._id %>';
+    const location = '<%= listing.location %>';
+    
+    // Show loading state
+    const mapContainer = document.getElementById('listing-map');
+    mapContainer.innerHTML = `
+        <div class="map-fallback">
+            <div class="text-center">
+                <i class="fa-solid fa-spinner fa-spin fa-3x mb-3"></i>
+                <p class="mb-0">Updating location coordinates...</p>
+                <small>${location}</small>
+            </div>
+        </div>
+    `;
+    
+    // Make AJAX call to the geocoding endpoint
+    fetch(`/listings/${listingId}/geocode`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            // Reload the page to show updated coordinates
+            window.location.reload();
+        } else {
+            throw new Error('Failed to update coordinates');
+        }
+    })
+    .catch(error => {
+        console.error('Error updating coordinates:', error);
+        // Show error message
+        mapContainer.innerHTML = `
+            <div class="map-fallback">
+                <div class="text-center">
+                    <i class="fa-solid fa-exclamation-triangle fa-3x mb-3 text-warning"></i>
+                    <p class="mb-0">Failed to update coordinates</p>
+                    <small>${location}</small>
+                    <br><br>
+                    <button class="btn btn-sm btn-outline-primary" onclick="retryGeocoding()">
+                        <i class="fa-solid fa-sync-alt"></i> Try Again
+                    </button>
+                </div>
+            </div>
+        `;
+    });
+}
+</script>
+
